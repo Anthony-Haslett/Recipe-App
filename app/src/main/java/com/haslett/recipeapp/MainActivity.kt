@@ -2,10 +2,6 @@ package com.haslett.recipeapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Text
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContentProviderCompat.requireContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,10 +10,6 @@ class MainActivity : AppCompatActivity() {
 
         // region Interop
         setContentView(R.layout.activity_main)
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, RecipeListFragment())
-            .commit()
 
         // endregion
 
