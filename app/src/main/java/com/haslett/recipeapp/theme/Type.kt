@@ -1,4 +1,4 @@
-package com.haslett.recipeapp.ui.theme
+package com.haslett.recipeapp.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
