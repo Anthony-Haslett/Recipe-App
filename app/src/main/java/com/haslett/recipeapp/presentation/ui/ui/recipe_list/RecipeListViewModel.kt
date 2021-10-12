@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.haslett.recipeapp.domain.model.Recipe
 import com.haslett.recipeapp.respository.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -15,31 +16,53 @@ import javax.inject.Named
 class RecipeListViewModel @Inject constructor(
     private val repository: RecipeRepository,
     private @Named("auth_token") val token: String,
-
+    
     ) : ViewModel() {
-
+    
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
     val query = mutableStateOf("")
     
     val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null)
     
     var categoryScrollPosition: Float = 0f
-
+    
+    val loading = mutableStateOf(false)
+    
     init {
         newSearch()
     }
-
+    
     fun newSearch() {
         viewModelScope.launch {
+            loading.value = true
+            
+            resetSearchState()
+            
+            delay(2000)
+            
             val result = repository.search(
                 token = token,
                 page = 1,
                 query = query.value
             )
+            
             recipes.value = result
+            
+            loading.value = false
         }
     }
-
+    
+    private fun resetSearchState() {
+        recipes.value = listOf()
+        if (selectedCategory.value?.value != query.value) {
+            clearSelectedCategory()
+        }
+    }
+    
+    private fun clearSelectedCategory() {
+        selectedCategory.value = null
+    }
+    
     fun onQueryChanged(query: String) {
         this.query.value = query
     }
